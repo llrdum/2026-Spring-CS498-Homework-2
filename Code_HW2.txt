@@ -1,0 +1,19 @@
+For Part IV, I wrote a client-side Python notebook (analysis.ipynb) that interacts with
+both deployed GCP instances to measure latency and observe eventual consistency behavior.
+
+Latency Measurement:
+The notebook sends HTTP requests to both instances.
+For each endpoint (/register and /list), it sends 26 requests and records the
+round-trip time for each using time.time() before and after each request. The average
+latency is then calculated and printed in milliseconds. /register uses POST with a
+fixed JSON body {"username": "User\_{letter}"} (where {letter} is a letter from A to Z), and /list uses GET.
+
+Eventual Consistency:
+The notebook loops 200 times. In each iteration, it generates a unique username using
+Python's uuid library, sends a POST request to Instance A's /register endpoint, then
+immediately sends a GET request to Instance B's /list endpoint and checks whether the
+newly registered username appears in the response. A miss counter is incremented if
+the username is not found. The final miss count is reported at the end.
+
+Both instances were cleared before the experiment using the /clear endpoint to ensure
+clean results. Results were automatically written to Analysis.txt upon completion.

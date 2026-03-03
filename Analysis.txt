@@ -1,0 +1,24 @@
+=== Part IV-A: Latency Results ===
+Instance A (us-central1)  /register avg: 121.62538 ms
+Instance B (europe-west1) /register avg: 458.11193 ms
+Instance A (us-central1)  /list avg:     106.26866 ms
+Instance B (europe-west1) /list avg:     396.31871 ms
+
+=== Part IV-B: Eventual Consistency ===
+Username not found immediately: 0/200 times
+
+=== Discussion ===
+Instance A (us-central1) shows lower latency (~121ms for /register, ~106ms 
+for /list) compared to Instance B (europe-west1), which averaged ~458ms and ~396ms 
+respectively. Instance B is roughly 3.7x slower for /register and 3.7x slower for 
+/list, reflecting the greater physical distance between our client and the european 
+region, where transatlantic network round-trip time is the dominant factor.
+
+The eventual consistency experiment produced a surprising result: 0 out of 200 
+iterations failed to find the username immediately on Instance B after registering on 
+Instance A. This suggests that in practice, Firestore's replication between us-central1 
+and europe-west1 is fast enough that by the time our /list request completes its full 
+round trip (~396ms), the data has already propagated. This shows that while eventual 
+consistency does not guarantee immediate visibility in theory, Firestore's replication 
+lag in practice can be shorter than the network latency itself, making inconsistencies 
+difficult to observe under normal conditions.
