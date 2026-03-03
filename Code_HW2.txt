@@ -1,4 +1,4 @@
-For Part IV, I wrote a client-side Python notebook (analysis.ipynb) that interacts with
+For Part IV, I wrote a client-side Python notebook (Analysis.ipynb) that interacts with
 both deployed GCP instances to measure latency and observe eventual consistency behavior.
 
 Latency Measurement:
